@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from "react-router-dom";
 import { auth } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -11,6 +12,11 @@ const Navbar = () => {
     // check if user is logged in
     let loggedIn = false;
     const [user, loading] = useAuthState(auth);
+    const [dropDownVisible, setDropDownVisible] = useState(false);
+
+    const toggleDropDown = () => {
+        setDropDownVisible(!dropDownVisible);
+    };
 
     if (!loading && user) {
         loggedIn = true;
@@ -18,34 +24,39 @@ const Navbar = () => {
 
     return (
         <div id="navbarContainer">
-            {/* <h1 id="header">Klinoff Travels</h1>
-            <div id="linksContainer">
-                <Link to="/signup">Signup</Link>
-                <Link to="/login">Login</Link>
-                <Link to="/profile">Profile</Link>
-            </div> */}
-            <img src={PigImage} alt="pig" id="pigImage" />
-            <Tooltip title="Search">
-                <SearchIcon id="searchIcon"/>
-            </Tooltip>
-            <input type="text" placeholder="Where do you want to go?"/>
-            <Tooltip title="Profile">
-                <PersonIcon id="personIcon"/>
-            </Tooltip>
-            <div id="userDropDown">
-                {loggedIn ? (
-                    <>
-                        <p>Hello, {user.displayName}</p>
-                        <button onClick={console.log(user)}>log user</button>
-                        <Link to="/profile">Profile</Link>
-                        <button onClick={() => auth.signOut()}>Logout</button>
-                    </>
+            <div id="logoContainer">
+                <img src={PigImage} alt="pig" id="pigImage" />
+            </div>
+            <div id="searchContainer">
+                <Tooltip title="Search">
+                    <SearchIcon id="searchIcon"/>
+                </Tooltip>
+                <input type="text" placeholder="Where do you want to go?"/>
+            </div>
+            <div id="navLinks">
+                {dropDownVisible ? (
+                    <PersonIcon id="personIcon" onClick={toggleDropDown}/>
                 ) : (
-                    <>
-                        <Link to="/login">Login</Link>
-                        <Link to="/signup">Signup</Link>
-                    </>
+                    <Tooltip title="Profile">
+                        <PersonIcon id="personIcon" onClick={toggleDropDown}/>
+                    </Tooltip>
                 )}
+                <div id="userDropDown">
+                    <div id="dropDownContainer" className={dropDownVisible ? 'show' : ''}>
+                        {loggedIn ? (
+                            <>
+                                <p>Hello, {user.displayName}</p>
+                                <Link to="/profile">Profile</Link>
+                                <button onClick={() => auth.signOut()}>Logout</button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/login">Login</Link>
+                                <Link to="/signup">Signup</Link>
+                            </>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     )

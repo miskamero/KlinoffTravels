@@ -1,72 +1,78 @@
-a {
-    cursor: pointer;
+#navbarContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.1);
 }
 
+#logoContainer {
+    flex: 0 0 5%;
+}
 
-// @keyframes fadeIn {
-//     from {
-//         opacity: 0;
-//         transform: translateY(-10px);
-//     }
-//     to {
-//         opacity: 1;
-//         transform: translateY(0);
-//     }
-// }
+#searchContainer {
+    flex: 0 0 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-// #navbarContainer {
-//     width: 100%;
-//     border: none;
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     background: linear-gradient(45deg, #e0e0e0, #bdbdbd);
-//     padding-top: 1rem;
-//     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-//     animation: fadeIn 0.5s ease-in-out;
+#navLinks {
+    flex: 0 0 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    svg {
+        cursor: pointer;
+    }
+    #personIcon {
+        cursor: pointer;
+        width: 24px;
+        height: 24px;
+        fill: #333;
+    }
+}
 
-//     #linksContainer {
-//         display: flex;
-//         justify-content: space-between;
-//         align-items: center;
-//         padding: 1rem 2rem;
-//         background-color: rgba(255, 255, 255, 0.8);
-//         border-radius: 8px;
-//         color: #333;
-//         width: 50%;
-//         animation: fadeIn 0.5s ease-in-out;
-//         -webkit-box-shadow: 5px 51px 92px -10px rgba(0,0,0,0.75);
-//         -moz-box-shadow: 5px 51px 92px -10px rgba(0,0,0,0.75);
-//         box-shadow: 5px 51px 92px -10px rgba(0,0,0,0.75);
+#dropDownContainer {
+    position: absolute;
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    right: 0;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
 
-//         a {
-//             color: #333;
-//             text-decoration: none;
-//             margin: 0 0.5rem;
-//             position: relative;
-//             transition: color 0.3s ease;
+    p, a, button {
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        color: #333;
+        background-color: #ffffff;
+        border: none;
+        width: 100%;
+        text-align: left;
+        cursor: default;
+    }
+}
 
-//             &:hover {
-//                 color: #666;
-//             }
-
-//             &::after {
-//                 content: '';
-//                 position: absolute;
-//                 width: 100%;
-//                 transform: scaleX(0);
-//                 height: 2px;
-//                 bottom: -2px;
-//                 left: 0;
-//                 background-color: #666;
-//                 transform-origin: bottom right;
-//                 transition: transform 0.25s ease-out;
-//             }
-
-//             &:hover::after {
-//                 transform: scaleX(1);
-//                 transform-origin: bottom left;
-//             }
-//         }
-//     }
-// }
+#dropDownContainer.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+    // first p element child
+    p:first-child {
+        cursor: default;
+    }
+    p, a, button {
+        cursor: pointer;
+    }
+}
