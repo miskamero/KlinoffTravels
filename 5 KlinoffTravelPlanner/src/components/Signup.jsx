@@ -1,24 +1,38 @@
 import { useState } from 'react';
 import { auth } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+// import router
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [displayName, setDisplayName] = useState('');
+    const navigate = useNavigate();
 
     const handleSignup = async (e) => {
         e.preventDefault();
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, { displayName });
             alert('User signed up successfully');
+            // route to profile page with react-router-dom
+            navigate('/profile');
         } catch (error) {
-                alert(error.message);
+            alert(error.message);
         }
     };
 
     return (
         <form onSubmit={handleSignup}>
             <h2>Signup</h2>
+            <input
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="Display Name"
+                required
+            />
             <input
                 type="email"
                 value={email}

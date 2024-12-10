@@ -33,16 +33,15 @@ const Navbar = () => {
                 <PersonIcon id="personIcon"/>
             </Tooltip>
             <div id="userDropDown">
-                {/* if user is logged in, show profile and logout, else show login and signup */}
                 {loggedIn ? (
                     <>
+                        <p>Hello, {user.displayName}</p>
+                        <button onClick={console.log(user)}>log user</button>
                         <Link to="/profile">Profile</Link>
                         <button onClick={() => auth.signOut()}>Logout</button>
                     </>
                 ) : (
                     <>
-                        {/* <a href='/login'>Login</a>
-                        <a href='/signup'>Signup</a> */}
                         <Link to="/login">Login</Link>
                         <Link to="/signup">Signup</Link>
                     </>
