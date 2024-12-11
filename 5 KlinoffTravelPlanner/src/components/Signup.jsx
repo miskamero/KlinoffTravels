@@ -16,7 +16,6 @@ const Signup = () => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             await updateProfile(userCredential.user, { displayName });
             alert('User signed up successfully');
-            // route to profile page with react-router-dom
             navigate('/profile');
         } catch (error) {
             alert(error.message);
