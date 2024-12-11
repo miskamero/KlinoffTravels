@@ -37,3 +37,11 @@
         background-color: #0056b3;
     }
 }
+
+#formContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
