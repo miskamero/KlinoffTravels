@@ -4,7 +4,7 @@
     align-items: center;
     width: 100%;
     background-color: #f8f9fa;
-    padding: 10px 20px;
+    padding: 10px 0px;
     box-shadow: 0 2px 4px 0 rgba(0,0,0, 0.1);
 }
 
@@ -12,11 +12,45 @@
     flex: 0 0 5%;
 }
 
+#pigImage {
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
 #searchContainer {
     flex: 0 0 80%;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    input {
+        width: 75%;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    svg {
+        position: absolute;
+        left: 15px;
+        width: 24px;
+        height: 24px;
+        fill: #333;
+        cursor: pointer;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+
+#searchBarContainer {
+    position: relative;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #333;
+    border-radius: 60px;
+    padding: 10px 0px;
 }
 
 #navLinks {
@@ -50,6 +84,7 @@
     transform: translateY(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
     pointer-events: none;
+    padding: 10px 0 15px;
 
     p, a, button {
         padding: 12px 16px;
@@ -61,6 +96,52 @@
         width: 100%;
         text-align: left;
         cursor: default;
+        width: fit-content;
+        margin: 0 auto;
+    }
+}
+
+#logoutButton {
+    border: 1px solid #dc3545 !important;
+    border-radius: 80px;
+    color: #dc3545 !important;
+    background-color: #ffffff !important;
+    margin-top: 10px !important;
+    width: 50% !important;
+    text-align: center !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 16px;
+    margin: auto;
+    cursor: pointer;
+
+    p {
+        margin: 0 !important;
+        padding: 0 !important;
+        transition: background-color 0.3s ease;
+        cursor: pointer !important;
+    }
+
+    svg {
+        width: 16px;
+        height: 16px;
+        fill: #dc3545;
+    }
+}
+
+#logoutButton:hover svg {
+    fill: #ffffff;
+}
+
+#logoutButton:hover {
+    background-color: #dc3545 !important;
+    
+    p {
+        color: #ffffff !important;
+        background-color: #dc3545 !important;
     }
 }
 
@@ -68,7 +149,6 @@
     opacity: 1;
     transform: translateY(0);
     pointer-events: all;
-    // first p element child
     p:first-child {
         cursor: default;
     }

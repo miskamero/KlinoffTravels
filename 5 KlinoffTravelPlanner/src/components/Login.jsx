@@ -20,7 +20,7 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={handleLogin}>
+        <form id='userForm' onSubmit={handleLogin}>
             <h2>Login</h2>
             <input
                 type="email"

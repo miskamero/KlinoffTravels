@@ -4,6 +4,7 @@ import Login from './components/Login'
 import Profile from './components/Profile'
 import PrivateRoute from './components/PrivateRoute'
 import Navbar from './components/Navbar'
+import LandingPage from './components/LandingPage'
 import './App.scss'
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
     <>
       <Navbar />
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={

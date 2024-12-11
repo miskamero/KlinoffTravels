@@ -6,20 +6,36 @@ import PigImage from '../assets/pig.png';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
 import Tooltip from '@mui/material/Tooltip';
+import LogoutIcon from '@mui/icons-material/Logout';
 import '../styles/Navbar.scss';
 
 const Navbar = () => {
-    // check if user is logged in
     let loggedIn = false;
     const [user, loading] = useAuthState(auth);
     const [dropDownVisible, setDropDownVisible] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
 
     const toggleDropDown = () => {
         setDropDownVisible(!dropDownVisible);
     };
 
+    const closeDropdown = () => {
+        setDropDownVisible(false);
+    };
+
     if (!loading && user) {
         loggedIn = true;
+    }
+
+    const search = () => {
+        const searchValue = document.querySelector('input').value;
+        alert(`Searching for ${searchValue}`);
+    };
+
+    const enterCheck = (e) => {
+        if (e.key === 'Enter') {
+            search();
+        }
     }
 
     return (
@@ -28,10 +44,12 @@ const Navbar = () => {
                 <img src={PigImage} alt="pig" id="pigImage" />
             </div>
             <div id="searchContainer">
-                <Tooltip title="Search">
-                    <SearchIcon id="searchIcon"/>
-                </Tooltip>
-                <input type="text" placeholder="Where do you want to go?"/>
+                <div id="searchBarContainer">
+                    <Tooltip title="Search">
+                        <SearchIcon id="searchIcon" onClick={search}/>
+                    </Tooltip>
+                    <input type="text" placeholder="Where do you want to go?" onKeyDown={enterCheck} onChange={(e) => setSearchValue(e.target.value)}/>
+                </div>
             </div>
             <div id="navLinks">
                 {dropDownVisible ? (
@@ -46,13 +64,16 @@ const Navbar = () => {
                         {loggedIn ? (
                             <>
                                 <p>Hello, {user.displayName}</p>
-                                <Link to="/profile">Profile</Link>
-                                <button onClick={() => auth.signOut()}>Logout</button>
+                                <Link to="/profile" onClick={closeDropdown}>Profile</Link>
+                                <div id='logoutButton' onClick={() => { auth.signOut(); closeDropdown()}}>
+                                    <p>Logout</p>
+                                    <LogoutIcon />
+                                </div>
                             </>
                         ) : (
                             <>
-                                <Link to="/login">Login</Link>
-                                <Link to="/signup">Signup</Link>
+                                <Link to="/login" onClick={closeDropdown}>Login</Link>
+                                <Link to="/signup" onClick={closeDropdown}>Signup</Link>
                             </>
                         )}
                     </div>

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-// import router
 import { useNavigate } from 'react-router-dom';
+import '../styles/SignupLogin.scss';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
@@ -24,7 +24,7 @@ const Signup = () => {
     };
 
     return (
-        <form onSubmit={handleSignup}>
+        <form id='userForm' onSubmit={handleSignup}>
             <h2>Signup</h2>
             <input
                 type="text"
