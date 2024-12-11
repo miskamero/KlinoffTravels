@@ -4,6 +4,8 @@ import { auth } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import PigImage from '../assets/pig.png';
 import SearchIcon from '@mui/icons-material/Search';
+import ExploreIcon from '@mui/icons-material/Explore';
+import CancelIcon from '@mui/icons-material/Cancel';
 import PersonIcon from '@mui/icons-material/Person';
 import Tooltip from '@mui/material/Tooltip';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -58,6 +60,11 @@ const Navbar = () => {
         }
     }
 
+    const resetSearch = () => {
+        setSearchValue('');
+        document.querySelector('input').value = '';
+    }
+
     return (
         <div id="navbarContainer">
             <div id="logoContainer" onClick={() => navigate('/')}>
@@ -69,6 +76,15 @@ const Navbar = () => {
                         <SearchIcon id="searchIcon" onClick={search}/>
                     </Tooltip>
                     <input type="text" placeholder="Where do you want to go?" onKeyDown={enterCheck} onChange={(e) => setSearchValue(e.target.value)}/>
+                    <div id="exploreContainer" className={searchValue ? '' : 'borderExploreContainer'}>
+                        {searchValue ? (
+                            <CancelIcon id="cancelIcon" onClick={resetSearch}/>
+                        ) : (
+                            <Tooltip title="Explore">
+                                <ExploreIcon id="exploreIcon" onClick={() => navigate(`/search_history`)}/>
+                            </Tooltip>
+                        )}
+                    </div>
                 </div>
             </div>
             <div id="navLinks">
