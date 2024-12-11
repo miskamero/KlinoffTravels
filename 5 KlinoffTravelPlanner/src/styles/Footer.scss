@@ -1,0 +1,130 @@
+.footer {
+    background-color: #1a1a1a;
+    color: #f5f5f5;
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+    animation: slideUp 1s ease-out;
+    overflow: hidden;
+    transition: background 0.3s ease;
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: radial-gradient(circle at var(--x) var(--y), rgba(255, 255, 255, 0.2), transparent 15%);
+        transition: background 0.3s ease;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: none;
+    }
+}
+
+#copyrightParagraph {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.footerContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+
+    p:first-child {
+        cursor: default;
+    }
+
+    p {
+        margin: 5px 0;
+        font-size: 1.1em;
+        animation: fadeIn 1.5s ease-in-out;
+    }
+
+    a {
+        color: #f5f5f5;
+        text-decoration: none;
+        margin: 0 10px;
+        position: relative;
+        transition: color 0.3s ease;
+
+        &:hover {
+            color: #007bff;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            margin-top: 5px;
+            background: #007bff;
+            transition: width 0.3s ease;
+        }
+
+        &:hover::after {
+            width: 100%;
+            background-color: #007bff;
+        }
+    }
+
+    a:nth-of-type(1)::after {
+        right: 0;
+        left: auto;
+    }
+
+    a:nth-of-type(1):hover::after {
+        right: 0;
+        left: auto;
+    }
+
+    a:nth-of-type(2)::after {
+        left: 0;
+        right: auto;
+    }
+
+    a:nth-of-type(2):hover::after {
+        left: 0;
+        right: auto;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+}

@@ -26,6 +26,10 @@ const LandingPage = () => {
                     <h2>Local Attractions</h2>
                     <p>Explore popular attractions</p>
                 </div>
+                <div className="feature">
+                    <h2>Itinerary Planner</h2>
+                    <p>Plan your trip with ease!</p>
+                </div>
             </section>
         </div>
     );

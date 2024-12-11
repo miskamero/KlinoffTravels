@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import { auth } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import PigImage from '../assets/pig.png';
@@ -11,9 +11,11 @@ import '../styles/Navbar.scss';
 
 const Navbar = () => {
     let loggedIn = false;
+    const navigate = useNavigate();
     const [user, loading] = useAuthState(auth);
     const [dropDownVisible, setDropDownVisible] = useState(false);
     const [searchValue, setSearchValue] = useState('');
+    const dropDownRef = useRef();
 
     const toggleDropDown = () => {
         setDropDownVisible(!dropDownVisible);
@@ -22,6 +24,24 @@ const Navbar = () => {
     const closeDropdown = () => {
         setDropDownVisible(false);
     };
+
+    useEffect(() => {
+        const checkIfClickedOutside = e => {
+            if (dropDownRef.current && !dropDownRef.current.contains(e.target)) {
+                closeDropdown();
+            }
+        };
+    
+        if (dropDownVisible) {
+            document.addEventListener("mousedown", checkIfClickedOutside);
+        } else {
+            document.removeEventListener("mousedown", checkIfClickedOutside);
+        }
+    
+        return () => {
+            document.removeEventListener("mousedown", checkIfClickedOutside);
+        };
+    }, [dropDownVisible]);
 
     if (!loading && user) {
         loggedIn = true;
@@ -40,7 +60,7 @@ const Navbar = () => {
 
     return (
         <div id="navbarContainer">
-            <div id="logoContainer">
+            <div id="logoContainer" onClick={() => navigate('/')}>
                 <img src={PigImage} alt="pig" id="pigImage" />
             </div>
             <div id="searchContainer">
@@ -59,7 +79,7 @@ const Navbar = () => {
                         <PersonIcon id="personIcon" onClick={toggleDropDown}/>
                     </Tooltip>
                 )}
-                <div id="userDropDown">
+                <div id="userDropDown" ref={dropDownRef}>
                     <div id="dropDownContainer" className={dropDownVisible ? 'show' : ''}>
                         {loggedIn ? (
                             <>

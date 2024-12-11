@@ -5,6 +5,7 @@ import Profile from './components/Profile'
 import PrivateRoute from './components/PrivateRoute'
 import Navbar from './components/Navbar'
 import LandingPage from './components/LandingPage'
+import Footer from './components/Footer'
 import './App.scss'
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
             </PrivateRoute>
           } />
       </Routes>
+      <Footer />
     </>
   )
 }
