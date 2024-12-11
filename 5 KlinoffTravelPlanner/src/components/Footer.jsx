@@ -4,31 +4,36 @@ import '../styles/Footer.scss';
 
 const Footer = () => {
     useEffect(() => {
-        let requestId;
         let targetX = 0;
         let targetY = 0;
         let currentX = 0;
         let currentY = 0;
-
+        let requestId;
+    
         const handleMouseMove = (e) => {
-            const footer = document.querySelector('.footer');
-            const rect = footer.getBoundingClientRect();
-            targetX = e.clientX - rect.left;
-            targetY = e.clientY - rect.top;
+            if (!requestId) {
+                requestId = requestAnimationFrame(() => {
+                    const footer = document.querySelector('.footer');
+                    const rect = footer.getBoundingClientRect();
+                    targetX = e.clientX - rect.left;
+                    targetY = e.clientY - rect.top;
+                    requestId = null;
+                });
+            }
         };
-
+    
         const updatePosition = () => {
             currentX += (targetX - currentX) * 0.18;
             currentY += (targetY - currentY) * 0.18;
             const footer = document.querySelector('.footer');
             footer.style.setProperty('--x', `${currentX}px`);
             footer.style.setProperty('--y', `${currentY}px`);
-            requestId = requestAnimationFrame(updatePosition);
+            requestAnimationFrame(updatePosition);
         };
-
+    
         window.addEventListener('mousemove', handleMouseMove);
-        requestId = requestAnimationFrame(updatePosition);
-
+        requestAnimationFrame(updatePosition);
+    
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
             cancelAnimationFrame(requestId);

@@ -3,10 +3,10 @@ import '../styles/LandingPage.scss';
 
 const LandingPage = () => {
     return (
-        <div className="landing-page">
-            <header className="hero-section">
+        <div className="landingPage">
+            <header className="heroSection">
                 <h1>Welcome to Klinoff Travels</h1>
-                <p>Your one-stop solution for planning the perfect trip</p>
+                <p>The one-stop solution for planning your  <span id='perfectEffect'>Perfect Trip</span></p>
                 <Link to="/signup" className="getStartedButton">Get Started</Link>
             </header>
             <section className="featureSection">
