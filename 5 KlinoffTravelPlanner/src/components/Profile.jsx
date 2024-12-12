@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { auth } from '../firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { Link } from 'react-router-dom';
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -32,6 +33,7 @@ const Profile = () => {
                 <div>
                     <h2>Welcome {user.email}</h2>
                     <button onClick={handleSignOut}>Sign out</button>
+                    <Link to="/flight_search" className="getStartedButton">Flight Search</Link>
                 </div>
             ) : (
                 <h2>User not logged in</h2>

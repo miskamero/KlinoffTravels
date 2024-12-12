@@ -76,7 +76,7 @@ const Navbar = () => {
                     <Tooltip title="Search">
                         <SearchIcon id="searchIcon" onClick={search}/>
                     </Tooltip>
-                    <input type="text" placeholder="Where do you want to go?" onKeyDown={enterCheck} onChange={(e) => setSearchValue(e.target.value)}/>
+                    <input type="text" placeholder="Where would you like to go?" onKeyDown={enterCheck} onChange={(e) => setSearchValue(e.target.value)}/>
                     <div id="exploreContainer" className={searchValue ? '' : 'borderExploreContainer'}>
                         {searchValue ? (
                             <CancelIcon id="cancelIcon" onClick={resetSearch}/>
