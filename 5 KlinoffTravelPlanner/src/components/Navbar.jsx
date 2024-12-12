@@ -9,6 +9,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import PersonIcon from '@mui/icons-material/Person';
 import Tooltip from '@mui/material/Tooltip';
 import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 import '../styles/Navbar.scss';
 
 const Navbar = () => {
@@ -88,11 +89,17 @@ const Navbar = () => {
                 </div>
             </div>
             <div id="navLinks">
-                {dropDownVisible ? (
-                    <PersonIcon id="personIcon" onClick={toggleDropDown}/>
-                ) : (
-                    <Tooltip title="Profile">
+                {loggedIn ? (
+                    dropDownVisible ? (
                         <PersonIcon id="personIcon" onClick={toggleDropDown}/>
+                    ) : (
+                        <Tooltip title="Profile">
+                            <PersonIcon id="personIcon" onClick={toggleDropDown}/>
+                        </Tooltip>
+                    )
+                ) : (
+                    <Tooltip title="Login">
+                        <LoginIcon id="loginIcon" onClick={() => navigate('/login')}/>
                     </Tooltip>
                 )}
                 <div id="userDropDown" ref={dropDownRef}>
