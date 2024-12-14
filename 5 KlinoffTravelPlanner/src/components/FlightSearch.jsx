@@ -1,31 +1,43 @@
 import { useState } from 'react';
 import axios from 'axios';
-import FetchIATA from './FetchIATA';
 
 const FlightSearch = () => {
     const [flights, setFlights] = useState([]);
     const [error, setError] = useState('');
     const [departureDate, setDepartureDate] = useState('');
     const [departureCity, setDepartureCity] = useState('');
-    const [departureCountry, setDepartureCountry] = useState('');
     const [arrivalCity, setArrivalCity] = useState('');
-    const [arrivalCountry, setArrivalCountry] = useState('');
-    const [departureIATA, setDepartureIATA] = useState('');
-    const [arrivalIATA, setArrivalIATA] = useState('');
 
-    const handleSearch = async (e) => {
-        e.preventDefault();
+    const fetchIATA = async (city) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:5000/api/airports/city/${city}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            console.log('API response data:', data);
+            // output the iata code of the object that id is not null
+            return data.find((airport) => airport.id !== null).iata;
+        } catch (err) {
+            throw new Error(`Error: ${err.message}`);
+        }
+    };
+
+    const handleSearch = async (depIATA, arrIATA) => {
         setError('');
         setFlights([]);
 
         try {
+            console.log('Searching for flights:', depIATA, arrIATA, departureDate);
+            console.log(`Dep date: ${departureDate}`);
             const airlabsApiKey = '8bd89b9c-ab4c-4447-b39c-a8910eb4bc1c';
-            let url = `https://airlabs.co/api/v9/schedules?api_key=${airlabsApiKey}&dep_iata=${departureIATA}&arr_iata=${arrivalIATA}`;
+            let url = `https://airlabs.co/api/v9/schedules?api_key=${airlabsApiKey}&dep_iata=${depIATA}&arr_iata=${arrIATA}`;
             if (departureDate) {
                 url += `&date=${departureDate}`;
             } else {
                 url += `&limit=10`;
             }
+            console.log('API URL:', url);
 
             const options = {
                 method: 'GET',
@@ -50,10 +62,21 @@ const FlightSearch = () => {
         }
     };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const depIATA = await fetchIATA(departureCity);
+            const arrIATA = await fetchIATA(arrivalCity);
+            await handleSearch(depIATA, arrIATA);
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
     return (
         <div>
             <h2>Flight Search</h2>
-            <form onSubmit={handleSearch}>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label>
                         Departure Date:
@@ -74,16 +97,6 @@ const FlightSearch = () => {
                             required
                         />
                     </label>
-                    <label>
-                        Departure Country:
-                        <input
-                            type="text"
-                            value={departureCountry}
-                            onChange={(e) => setDepartureCountry(e.target.value)}
-                            required
-                        />
-                    </label>
-                    <FetchIATA cityName={departureCity} countryName={departureCountry} setIataCode={setDepartureIATA} />
                 </div>
                 <div>
                     <label>
@@ -95,16 +108,6 @@ const FlightSearch = () => {
                             required
                         />
                     </label>
-                    <label>
-                        Arrival Country:
-                        <input
-                            type="text"
-                            value={arrivalCountry}
-                            onChange={(e) => setArrivalCountry(e.target.value)}
-                            required
-                        />
-                    </label>
-                    <FetchIATA cityName={arrivalCity} countryName={arrivalCountry} setIataCode={setArrivalIATA} />
                 </div>
                 <button type="submit">Search</button>
             </form>

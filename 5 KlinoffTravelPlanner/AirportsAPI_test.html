@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing API</title>
+</head>
+<body>
+    <!-- # Airports API Documentation
+
+**Base URL:** `http://127.0.0.1:5000/api/`
+
+**Endpoints:**
+
+1. **GET /airports**
+    - Returns a list of all airports in the database.
+    - Example: `http://127.0.0.1:5000/api/airports`
+
+2. **GET /airports/{IATA_code}**
+    - Returns the airport with the given IATA code.
+    - Example: `http://127.0.0.1:5000/api/airports/HEL`
+
+3. **GET /airports/city/{city_name}**
+    - Returns a list of all airports in the given city.
+    - Example: `http://127.0.0.1:5000/api/airports/city/Helsinki`
+
+4. **GET /airports/city/{city_name}/country/{country_name}**
+    - Returns the first airport in the given city and country that has a Skyscanner ID.
+    - Example: `http://127.0.0.1:5000/api/airports/city/helsinki/country/finland` -->
+
+    <!-- we test the API here -->
+    <h1>Testing API</h1>
+    <input type="text" id="cityName" placeholder="Enter City Name">
+    <input type="text" id="countryName" placeholder="Enter Country Name">
+    <input type="text" id="iataCode" placeholder="Enter Iata Code">
+
+    <br><br>
+
+    <button id="getAirports">Get All Airports</button>
+    <button id="getIataCode">Get Iata Code for airport From City Name</button>
+    <button id="getAirportsInCity">Get All Airports In City</button>
+    <button id="getAirportInCityCountry">Get Airport In City Country</button>
+    
+    <div id="output"></div>
+
+    <script>
+        const getAirports = document.getElementById('getAirports');
+        const getIataCode = document.getElementById('getIataCode');
+        const getAirportsInCity = document.getElementById('getAirportsInCity');
+        const getAirportInCityCountry = document.getElementById('getAirportInCityCountry');
+        const cityName = document.getElementById('cityName');
+        const countryName = document.getElementById('countryName');
+        const iataCode = document.getElementById('iataCode');
+        const output = document.getElementById('output');
+
+        // get all airports
+        getAirports.addEventListener('click', () => {
+            fetch('http://127.0.0.1:5000/api/airports')
+                .then(response => response.json())
+                .then(data => {
+                    output.innerHTML = JSON.stringify(data, null, 2);
+                });
+        });
+
+        // get Iata code for airport from city name
+        // remember to console.log for debug
+        getIataCode.addEventListener('click', () => {
+            fetch(`http://127.0.0.1:5000/api/airports/city/${cityName.value}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // output the iata code of the object that id is not null
+                    output.innerHTML = data.find(airport => airport.id !== null).iata;
+                    console.log(data.find(airport => airport.id !== null).iata);
+                });
+        });
+
+        // get all airports in city
+        getAirportsInCity.addEventListener('click', () => {
+            fetch(`http://127.0.0.1:5000/api/airports/city/${cityName.value}`)
+                .then(response => response.json())
+                .then(data => {
+                    output.innerHTML = JSON.stringify(data, null, 2);
+                });
+        });
+
+        // get airport in city and country
+        getAirportInCityCountry.addEventListener('click', () => {
+            fetch(`http://127.0.0.1:5000/api/airports/city/${cityName.value}/country/${countryName.value}`)
+                .then(response => response.json())
+                .then(data => {
+                    output.innerHTML = JSON.stringify(data, null, 2);
+                });
+        });
+    </script>
+
+</body>
+</html>

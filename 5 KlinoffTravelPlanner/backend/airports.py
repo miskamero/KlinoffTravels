@@ -1,7 +1,9 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 import json
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # load the airports
 with open('./airport_data/airports.json', encoding='utf-8') as f:
