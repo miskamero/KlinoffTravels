@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../styles/FlightSearch.scss';
 
 const FlightSearch = () => {
     const [flights, setFlights] = useState([]);
@@ -110,10 +111,10 @@ const FlightSearch = () => {
     };
 
     return (
-        <div>
+        <div id="flightSearchContainer">
             <h2>Flight Search</h2>
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className="form-group">
                     <label>
                         Departure Date:
                         <input
@@ -123,7 +124,7 @@ const FlightSearch = () => {
                         />
                     </label>
                 </div>
-                <div>
+                <div className="form-group">
                     <label>
                         Departure City:
                         <input
@@ -134,7 +135,7 @@ const FlightSearch = () => {
                         />
                     </label>
                 </div>
-                <div>
+                <div className="form-group">
                     <label>
                         Arrival City:
                         <input
@@ -147,8 +148,8 @@ const FlightSearch = () => {
                 </div>
                 <button type="submit">Search</button>
             </form>
-            {error && <p>{error}</p>}
-            <div>
+            {error && <p className="error">{error}</p>}
+            <div className="results">
                 {advancedFlights && advancedFlights.itineraries && advancedFlights.itineraries.buckets && advancedFlights.itineraries.buckets.length > 0 ? (
                     <ul>
                         {advancedFlights.itineraries.buckets.map((bucket) =>
