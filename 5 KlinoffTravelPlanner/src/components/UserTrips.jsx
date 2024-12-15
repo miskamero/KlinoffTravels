@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import '../styles/UserTrips.scss';
 import PropTypes from 'prop-types';
@@ -12,12 +12,8 @@ const UserTrips = ({ userId }) => {
     const [returnDate, setReturnDate] = useState('');
     const [details, setDetails] = useState('');
     const apiUrl = "http://127.0.0.1:5001/api/"
-
-    useEffect(() => {
-        fetchTrips();
-    }, [userId]);
-
-    const fetchTrips = async () => {
+    
+    const fetchTrips = useCallback(async () => {
         try {
             const response = await axios.get(`${apiUrl}trips/${userId}`);
             setTrips(response.data || []);
@@ -25,8 +21,12 @@ const UserTrips = ({ userId }) => {
             console.error('Error fetching trips:', error);
             setTrips([]);
         }
-    };
-
+    }, [userId, apiUrl, setTrips]);
+    
+        useEffect(() => {
+            fetchTrips();
+        }, [userId, fetchTrips]);
+    
     const handleAddTrip = async (e) => {
         e.preventDefault();
         try {
