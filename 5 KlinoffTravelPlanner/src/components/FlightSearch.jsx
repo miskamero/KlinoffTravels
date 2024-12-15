@@ -33,7 +33,7 @@ const FlightSearch = () => {
             const airlabsApiKey = '8bd89b9c-ab4c-4447-b39c-a8910eb4bc1c';
             let url = `https://airlabs.co/api/v9/schedules?api_key=${airlabsApiKey}&dep_iata=${depIATA}&arr_iata=${arrIATA}`;
             if (departureDate) {
-                url += `&date=${departureDate}`;
+                url += `&dep_time=${departureDate}`;
             } else {
                 url += `&limit=10`;
             }
