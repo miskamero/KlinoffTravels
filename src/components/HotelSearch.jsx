@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { fetchHotels } from '../services/FetchHotelsService';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarHalfIcon from '@mui/icons-material/StarHalf';
@@ -14,39 +14,22 @@ const HotelSearch = () => {
     useEffect(() => {
         if (!searchQuery) return;
 
-        const fetchHotels = async () => {
+        const fetchHotelData = async () => {
             setLoading(true);
             setError(null);
 
             try {
-                const klinoffSearchOptions = {
-                    method: 'GET',
-                    url: 'https://tripadvisor-scraper.p.rapidapi.com/hotels/list',
-                    params: {
-                        query: searchQuery,
-                        page: '1'
-                    },
-                    headers: {
-                        'x-rapidapi-key': 'f236296ef0msh656e9a274a63e9ep12c7cfjsn42a2f740ad7a',
-                        'x-rapidapi-host': 'tripadvisor-scraper.p.rapidapi.com'
-                    }
-                };
-
-                const response = await axios.request(klinoffSearchOptions);
-                console.log('API Response:', response.data);
-
-                const hotelList = response.data.results || [];
+                const hotelList = await fetchHotels(searchQuery);
                 setHotels(hotelList);
             } catch (err) {
-                console.error('Error fetching hotel data:', err);
-                setError('Unable to fetch hotel data. Please try again later.');
+                setError(err.message);
                 setHotels([]);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchHotels();
+        fetchHotelData();
     }, [searchQuery]);
 
     const handleSearchByInput = () => {
