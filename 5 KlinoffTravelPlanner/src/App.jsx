@@ -11,6 +11,7 @@ import LandingPage from './components/LandingPage'
 import Footer from './components/Footer'
 import UserTrips from './components/UserTrips'
 import FlightSearch from './components/FlightSearch'
+import HotelSearch from './components/HotelSearch';
 
 import './App.scss'
 
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/flight_search" element={<FlightSearch />} />
+        <Route path="/hotel_search" element={<HotelSearch />} />
         <Route path="/profile" element={
             <PrivateRoute>
               <Profile />
