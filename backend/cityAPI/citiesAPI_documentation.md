@@ -18,7 +18,7 @@
 
 4. **GET /coords/{city_name}**
     - Returns the latitude and longitude of the given city.
-    - Example: `http://127.0.0.1:5002/api/coods/helsinki`
+    - Example: `http://127.0.0.1:5002/api/coords/helsinki`
 
 5. **GET /coords/{country_name}**
     - Returns the latitude and longitude of the given country.
