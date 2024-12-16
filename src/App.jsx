@@ -9,11 +9,12 @@ import PrivateRoute from './components/PrivateRoute'
 import Navbar from './components/Navbar'
 import LandingPage from './components/LandingPage'
 import Footer from './components/Footer'
-import UserTrips from './components/UserTrips'
 import FlightSearch from './components/FlightSearch'
 import HotelSearch from './components/HotelSearch';
 import WeatherSearch from './components/WeatherSearch';
 import AttractionSearch from './components/AttractionSearch';
+import UserTrips from './components/UserTrips'
+import NewTrip from './components/NewTrip'
 
 import './App.scss'
 
@@ -51,11 +52,16 @@ const App = () => {
               <Profile />
             </PrivateRoute>
           } />
-          <Route path="user-trips" element={
-            <PrivateRoute>
-              {userId ? <UserTrips userId={userId} /> : <p>Loading...</p>}
-            </PrivateRoute>
-            } />
+        <Route path="user-trips" element={
+          <PrivateRoute>
+            {userId ? <UserTrips userId={userId} /> : <p>Loading...</p>}
+          </PrivateRoute>
+        } />
+        <Route path="new-trip" element={
+          <PrivateRoute>
+            {userId ? <NewTrip userId={userId} /> : <p>Loading...</p>}
+          </PrivateRoute>
+        } />
       </Routes>
       <Footer />
     </>
