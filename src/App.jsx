@@ -13,6 +13,7 @@ import UserTrips from './components/UserTrips'
 import FlightSearch from './components/FlightSearch'
 import HotelSearch from './components/HotelSearch';
 import WeatherSearch from './components/WeatherSearch';
+import AttractionSearch from './components/AttractionSearch';
 
 import './App.scss'
 
@@ -44,6 +45,7 @@ const App = () => {
         <Route path="/flight-search" element={<FlightSearch />} />
         <Route path="/hotel-search" element={<HotelSearch />} />
         <Route path="/weather-search" element={<WeatherSearch />} />
+        <Route path="/attraction-search" element={<AttractionSearch />} />
         <Route path="/profile" element={
             <PrivateRoute>
               <Profile />
