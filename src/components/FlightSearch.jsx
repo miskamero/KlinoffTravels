@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { searchFlights } from '../services/FlightSearchService';
 import '../styles/FlightSearch.scss';
 
 const FlightSearch = () => {
@@ -14,97 +14,18 @@ const FlightSearch = () => {
         console.log('Advanced Flights:', advancedFlights);
     }, [advancedFlights]);
 
-    const fetchIATA = async (city) => {
-        try {
-            const response = await fetch(`http://127.0.0.1:5000/api/airports/city/${city}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            console.log('API response data from IATA API:', data);
-            // output the iata code of the object that id is not null
-            return data.find((airport) => airport.id !== null).iata;
-        } catch (err) {
-            throw new Error(`Error: ${err.message}`);
-        }
-    };
-
-    let advancedKlinoffApiConfig = {
-        method: 'get',
-        url: 'https://Skyscanner.proxy-production.allthingsdev.co/search?adults=1',
-        headers: { 
-            'x-apihub-key': 'B2WyWLbT1J0rznbUYPmaB01waqAA70iydq29KCIGVoxDjvuWuA', 
-            'x-apihub-host': 'Skyscanner.allthingsdev.co', 
-            'x-apihub-endpoint': '1bffa651-8d6b-449d-a181-0d9f8e17b0ac'
-        }
-    };
-
-    const fetchAdvancedFlights = async (depIATA, arrIATA, departureDate) => {
-        let baseUrl = advancedKlinoffApiConfig.url;
-        let searchUrl = `${advancedKlinoffApiConfig.url}&origin=${depIATA}&destination=${arrIATA}&departureDate=${departureDate}`;
-        advancedKlinoffApiConfig.url = searchUrl;
-        console.log('API URL better api:', searchUrl);
-        try {
-            const response = await axios.request(advancedKlinoffApiConfig);
-            console.log(JSON.stringify(response.data));
-            if (response.status === 200) {
-                setAdvancedFlights(response.data);
-            } else {
-                setError(`Error: Received status code ${response.status}`);
-            }
-        } catch (error) {
-            console.error(error);
-            setError('Error fetching advanced flight data');
-        } finally {
-            advancedKlinoffApiConfig.url = baseUrl;
-        }
-    };
-
-    const handleSearch = async (depIATA, arrIATA) => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         setError('');
         setFlights([]);
         setAdvancedFlights([]);
 
         try {
-            console.log('Searching for flights:', depIATA, arrIATA, departureDate);
-            console.log(`Dep date: ${departureDate}`);
-            const airlabsApiKey = '8bd89b9c-ab4c-4447-b39c-a8910eb4bc1c';
-            let url = `https://airlabs.co/api/v9/schedules?api_key=${airlabsApiKey}&dep_iata=${depIATA}&arr_iata=${arrIATA}&limit=10`;
-            if (departureDate) {
-                await fetchAdvancedFlights(depIATA, arrIATA, departureDate);
-                return;
+            const { airlabs, skyscanner } = await searchFlights(departureCity, arrivalCity, departureDate);
+            setFlights(airlabs);
+            if (skyscanner) {
+                setAdvancedFlights(skyscanner);
             }
-            console.log('API URL:', url);
-
-            const options = {
-                method: 'GET',
-                url: url,
-            };
-
-            const response = await axios.request(options);
-            console.log('Response:', response);
-
-            if (response.status === 200 && response.data.response) {
-                setFlights(response.data.response);
-            } else {
-                setError(`Error: Received status code ${response.status}`);
-            }
-        } catch (err) {
-            console.error('API Error:', err);
-            if (err.response) {
-                setError(`Error: ${err.response.status} - ${err.response.data.message}`);
-            } else {
-                setError('Error fetching flight data');
-            }
-        }
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const depIATA = await fetchIATA(departureCity);
-            const arrIATA = await fetchIATA(arrivalCity);
-            await handleSearch(depIATA, arrIATA);
         } catch (err) {
             setError(err.message);
         }
