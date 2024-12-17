@@ -33,7 +33,8 @@ const Profile = () => {
                 <div>
                     <h2>Welcome {user.email}</h2>
                     <button onClick={handleSignOut}>Sign out</button>
-                    <Link to="/flight_search" className="getStartedButton">Flight Search</Link>
+                    <Link to="/flight-search" className="getStartedButton">Flight Search</Link>
+                    <Link to="/new-trip" className="getStartedButton">New Trip</Link>
                 </div>
             ) : (
                 <h2>User not logged in</h2>
