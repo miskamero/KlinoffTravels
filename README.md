@@ -1,5 +1,7 @@
 # Klinoff Travels
 
+**Part of API Development Course. See other projects in the [API Development Course](https://github.com/miskamero/API-Course).**
+
 ## Table of Contents
 
 - [Features](#features)
