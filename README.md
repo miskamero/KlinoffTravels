@@ -128,6 +128,9 @@ Klinoff-Travels/
 |   |   |   ├── FlightSearch.scss
 |   |   |   ├── Footer.scss
 |   |   |   ├── ...
+│   ├── services
+│   │   ├── AttractionSearchService.js
+│   │   ├── ...
 │   ├── App.jsx
 │   ├── App.scss
 │   ├── firebase.js
