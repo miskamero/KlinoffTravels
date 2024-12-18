@@ -51,8 +51,11 @@ const Navbar = () => {
     }
 
     const search = () => {
-        const searchValue = document.querySelector('input').value;
-        alert(`Searching for ${searchValue}`);
+        if (searchValue.trim()) {
+            navigate(`/flight-search?destination=${searchValue}`);
+        } else {
+            alert('Please enter a destination');
+        }
     };
 
     const enterCheck = (e) => {

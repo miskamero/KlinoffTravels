@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { getAttractions } from '../services/AttractionSearchService';
 import PropTypes from 'prop-types';
+import '../styles/NewTripComponents.scss';
 
-const AttractionSearch = ({ arrivalCity, onSelectAttraction }) => {
+const AttractionSearch = ({
+    arrivalCity = '',
+    onSelectAttraction
+}) => {
     const [attractions, setAttractions] = useState([]);
     const [selectedAttractions, setSelectedAttractions] = useState([]);
     const [error, setError] = useState('');
@@ -31,9 +35,9 @@ const AttractionSearch = ({ arrivalCity, onSelectAttraction }) => {
     };
 
     return (
-        <>
-            <h1>Attractions in {arrivalCity}</h1>
-            {error && <p>{error}</p>}
+        <div className="attraction-search-container">
+            <h2>Attractions in {arrivalCity}</h2>
+            {error && <p className="error">{error}</p>}
             <ul>
                 {attractions.map((attraction) => (
                     <li key={attraction.properties.id}>
@@ -46,13 +50,13 @@ const AttractionSearch = ({ arrivalCity, onSelectAttraction }) => {
                 ))}
             </ul>
             {selectedAttractions.length === 3 && <p>You have selected the maximum of 3 attractions.</p>}
-        </>
+        </div>
     );
 }
 
 AttractionSearch.propTypes = {
-    arrivalCity: PropTypes.string.isRequired,
-    onSelectAttraction: PropTypes.func.isRequired
+    arrivalCity: PropTypes.string,
+    onSelectAttraction: PropTypes.func
 };
 
 export default AttractionSearch;

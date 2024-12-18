@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { searchFlights } from '../services/FlightSearchService';
 import PropTypes from 'prop-types';
-import '../styles/FlightSearch.scss';
+import '../styles/NewTripComponents.scss';
 
 const FlightSearch = ({
     departureDate = new Date().toISOString().split('T')[0],
@@ -43,7 +43,7 @@ const FlightSearch = ({
     }, [departureCity, arrivalCity, departureDate]);
 
     return (
-        <div id="flightSearchContainer">
+        <div className="flight-search-container">
             <h2>{isOutbound ? 'Outbound Flight Search' : 'Inbound Flight Search'}</h2>
             {error && <p className="error">{error}</p>}
             <div className="results">
@@ -91,7 +91,7 @@ FlightSearch.propTypes = {
     departureDate: PropTypes.string,
     departureCity: PropTypes.string,
     arrivalCity: PropTypes.string,
-    onSelectFlight: PropTypes.func.isRequired,
+    onSelectFlight: PropTypes.func,
     isOutbound: PropTypes.bool
 };
 

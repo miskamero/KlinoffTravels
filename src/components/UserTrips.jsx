@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/UserTrips.scss';
 import PropTypes from 'prop-types';
@@ -77,6 +78,7 @@ const UserTrips = ({ userId }) => {
     return (
         <div id="userTripsContainer">
             <h2>My Trips</h2>
+            <Link to="/new-trip" className="new-trip-link">Create New Trip</Link>
             <ul>
                 {trips.map((trip) => {
                     const details = JSON.parse(trip.details);

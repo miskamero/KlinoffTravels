@@ -7,12 +7,18 @@ import WeatherSearch from './WeatherSearch';
 import FlightSearch from './FlightSearch';
 import HotelSearch from './HotelSearch';
 import AttractionSearch from './AttractionSearch';
+import '../styles/NewTripComponents.scss';
 
 const NewTrip = () => {
     const [userId, setUserId] = useState("klinoff");
     const [origin, setOrigin] = useState('');
     const [destination, setDestination] = useState('');
-    const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
+    // default state for startDate is tomorrow's date
+    const [startDate, setStartDate] = useState(() => {
+        const today = new Date();
+        today.setDate(today.getDate() + 1);
+        return today.toISOString().split('T')[0];
+    });
     const [endDate, setEndDate] = useState('');
     const [step, setStep] = useState(1);
     const [weather, setWeather] = useState(null);
@@ -21,11 +27,14 @@ const NewTrip = () => {
     const [selectedHotel, setSelectedHotel] = useState(null);
     const [selectedAttractions, setSelectedAttractions] = useState([]);
     const navigate = useNavigate();
-    let totalDays = 1;
+    // let totalDays = 1;
+    console.log(weather);
 
-    const getTodayDate = () => {
+    const getTomorrowDate = () => {
         const today = new Date();
-        return today.toISOString().split('T')[0];
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+        return tomorrow.toISOString().split('T')[0];
     }
 
     useEffect(() => {
@@ -56,7 +65,7 @@ const NewTrip = () => {
             setDestination(document.getElementById('destination').value);
             setStartDate(document.getElementById('startDate').value);
             setEndDate(document.getElementById('endDate').value);
-            totalDays = Math.floor((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+            // totalDays = Math.floor((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
             setStep(step + 1);
         }
     }
@@ -121,7 +130,7 @@ const NewTrip = () => {
     }
 
     return (
-        <div>
+        <div id="newTripContainer">
             {userId !== "klinoff" ? (
                 <>
                     <h1>New Trip</h1>
@@ -147,8 +156,8 @@ const NewTrip = () => {
                                 type="date"
                                 id="startDate"
                                 name="startDate"
-                                min={getTodayDate()}
-                                value={startDate || getTodayDate()}
+                                min={getTomorrowDate()}
+                                value={startDate || getTomorrowDate()}
                                 onChange={(e) => setStartDate(e.target.value)}
                                 required /><br/>
                             <label htmlFor="endDate">End Date:</label>
@@ -156,46 +165,45 @@ const NewTrip = () => {
                                 type="date"
                                 id="endDate"
                                 name="endDate"
-                                min={startDate || getTodayDate()}
+                                min={startDate || getTomorrowDate()}
                                 onChange={(e) => setEndDate(e.target.value)}
                                 required /><br/>
                             <button onClick={handleSubmit}>Next</button>
                         </form>
                     ) : step === 2 ? (
-                        <>
+                        <div className="trip-section">
                             <WeatherSearch destination={destination} setWeather={setWeather} startDate={startDate} endDate={endDate} />
                             <p>Destination: {destination}</p>
                             <p>Start Date: {startDate}</p>
                             <p>End Date: {endDate}</p>
-                            <p>Total Days: {totalDays}</p>
                             <button onClick={() => setStep(step - 1)}>Back</button>
-                            {/* <button onClick={() => setStep(step + 1)}>Step 3: Outbound Flight</button> */}
-                        </>
+                            <button onClick={() => setStep(step + 1)}>Step 3: Outbound Flight</button>
+                        </div>
                     ) : step === 3 ? (
-                        <>
+                        <div className="trip-section">
                             <FlightSearch departureDate={startDate} departureCity={origin} arrivalCity={destination} onSelectFlight={handleSelectOutboundFlight} isOutbound={true} />
                             <button onClick={() => setStep(step - 1)}>Back</button>
-                        </>
+                        </div>
                     ) : step === 4 ? (
-                        <>
+                        <div className="trip-section">
                             <FlightSearch departureDate={endDate} departureCity={destination} arrivalCity={origin} onSelectFlight={handleSelectInboundFlight} isOutbound={false} />
                             <button onClick={() => setStep(step - 1)}>Back</button>
                             <button onClick={() => setStep(step + 1)}>Step 5: Hotels</button>
-                        </>
+                        </div>
                     ) : step === 5 ? (
-                        <>
+                        <div className="trip-section">
                             <HotelSearch arrivalCity={destination} onSelectHotel={handleSelectHotel} />
                             <button onClick={() => setStep(step - 1)}>Back</button>
                             <button onClick={() => setStep(step + 1)}>Step 6: Attractions</button>
-                        </>
+                        </div>
                     ) : step === 6 ? (
-                        <>
+                        <div className="trip-section">
                             <AttractionSearch arrivalCity={destination} onSelectAttraction={handleSelectAttraction} />
                             <button onClick={() => setStep(step - 1)}>Back</button>
                             <button onClick={() => setStep(step + 1)}>Step 7: Overview</button>
-                        </>
+                        </div>
                     ) : step === 7 ? (
-                        <>
+                        <div className="trip-section">
                             <h2>Trip Overview</h2>
                             <p><strong>Origin:</strong> {origin}</p>
                             <p><strong>Destination:</strong> {destination}</p>
@@ -213,7 +221,7 @@ const NewTrip = () => {
                             <button onClick={handleReset}>Reset</button>
                             <button onClick={handleTripSave}>Save</button>
                             <button onClick={() => setStep(step - 1)}>Back</button>
-                        </>
+                        </div>
                     ) : (
                         <p>Step {step}</p>
                     )}

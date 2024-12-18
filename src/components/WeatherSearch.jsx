@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getCoordsOfCity, getWeatherData } from '../services/WeatherService';
 import PropTypes from 'prop-types';
+import '../styles/NewTripComponents.scss';
 
 const WeatherSearch = ({
     destination = '',
@@ -23,7 +24,7 @@ const WeatherSearch = ({
                 setWeatherData(weather);
                 setWeather(weather);
 
-                const start = new Date(startDate);
+                // const start = new Date(startDate);
                 const end = new Date(endDate);
                 const today = new Date();
                 const maxForecastDate = new Date(today);
@@ -51,7 +52,8 @@ const WeatherSearch = ({
 
         const start = new Date(startDate);
         const end = new Date(endDate);
-        return weatherData.daily.time.filter((date, index) => {
+        // return weatherData.daily.time.filter((date, index) => {
+        return weatherData.daily.time.filter((date) => {
             const forecastDate = new Date(date);
             return forecastDate >= start && forecastDate <= end;
         }).map((date, index) => ({
@@ -64,10 +66,10 @@ const WeatherSearch = ({
     const filteredWeatherData = filterWeatherData();
 
     return (
-        <div>
+        <div className="weather-search-container">
             <h2>Weather Information for {destination}</h2>
             {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
+            {error && <p className="error">{error}</p>}
             {limitedForecast && <p>Due to API limitations we can only provide 16 days of forecasts from today</p>}
             {filteredWeatherData.length > 0 && (
                 <div>

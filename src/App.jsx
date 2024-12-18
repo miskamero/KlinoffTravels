@@ -9,12 +9,14 @@ import PrivateRoute from './components/PrivateRoute'
 import Navbar from './components/Navbar'
 import LandingPage from './components/LandingPage'
 import Footer from './components/Footer'
-import FlightSearch from './components/FlightSearch'
 import HotelSearch from './components/HotelSearch';
 import WeatherSearch from './components/WeatherSearch';
 import AttractionSearch from './components/AttractionSearch';
 import UserTrips from './components/UserTrips'
 import NewTrip from './components/NewTrip'
+import NavbarFlightSearch from './components/NavbarFlightSearch';
+import Terms from './components/Terms';
+import Privacy from './components/Privacy';
 
 import './App.scss'
 
@@ -43,7 +45,7 @@ const App = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/flight-search" element={<FlightSearch />} />
+        <Route path="/flight-search" element={<NavbarFlightSearch />} />
         <Route path="/hotel-search" element={<HotelSearch />} />
         <Route path="/weather-search" element={<WeatherSearch />} />
         <Route path="/attraction-search" element={<AttractionSearch />} />
@@ -62,6 +64,8 @@ const App = () => {
             {userId ? <NewTrip userId={userId} /> : <p>Loading...</p>}
           </PrivateRoute>
         } />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
       </Routes>
       <Footer />
     </>

@@ -83,7 +83,7 @@ const HotelSearch = ({
 
 HotelSearch.propTypes = {
     arrivalCity: PropTypes.string,
-    onSelectHotel: PropTypes.func.isRequired
+    onSelectHotel: PropTypes.func
 };
 
 export default HotelSearch;
