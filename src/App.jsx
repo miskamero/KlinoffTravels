@@ -9,9 +9,9 @@ import PrivateRoute from './components/PrivateRoute'
 import Navbar from './components/Navbar'
 import LandingPage from './components/LandingPage'
 import Footer from './components/Footer'
-import HotelSearch from './components/HotelSearch';
-import WeatherSearch from './components/WeatherSearch';
-import AttractionSearch from './components/AttractionSearch';
+// import HotelSearch from './components/HotelSearch';
+// import WeatherSearch from './components/WeatherSearch';
+// import AttractionSearch from './components/AttractionSearch';
 import UserTrips from './components/UserTrips'
 import NewTrip from './components/NewTrip'
 import NavbarFlightSearch from './components/NavbarFlightSearch';
@@ -46,9 +46,9 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/flight-search" element={<NavbarFlightSearch />} />
-        <Route path="/hotel-search" element={<HotelSearch />} />
-        <Route path="/weather-search" element={<WeatherSearch />} />
-        <Route path="/attraction-search" element={<AttractionSearch />} />
+        {/* <Route path="/hotel-search" element={<HotelSearch />} /> */}
+        {/* <Route path="/weather-search" element={<WeatherSearch />} /> */}
+        {/* <Route path="/attraction-search" element={<AttractionSearch />} /> */}
         <Route path="/profile" element={
             <PrivateRoute>
               <Profile />
