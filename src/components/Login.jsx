@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -12,10 +12,10 @@ const Login = () => {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            alert('User logged in successfully');
+            // alert('User logged in successfully');
             navigate('/profile');
         } catch (error) {
-            alert(error.message);
+            alert(`Error: ${error.message}`);
         }
     };
 
@@ -38,6 +38,9 @@ const Login = () => {
                     required
                 />
                 <button type="submit">Login</button>
+                <p>
+                    Don&apos;t have an account? <Link to="/signup">Signup</Link>
+                </p>
             </form>
         </div>
     );

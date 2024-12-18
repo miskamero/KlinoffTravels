@@ -1,13 +1,24 @@
 import { Link } from 'react-router-dom';
+import { auth } from '../firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import '../styles/LandingPage.scss';
 
 const LandingPage = () => {
+    const [user, loading] = useAuthState(auth);
+
+    if (loading) {
+        return null;
+    }
     return (
         <div className="landingPage">
             <header className="heroSection">
                 <h1>Welcome to Klinoff Travels</h1>
                 <p>The one-stop solution for planning your  <span id='perfectEffect'>Perfect Trip</span></p>
-                <Link to="/signup" className="getStartedButton">Get Started</Link>
+                {user ? (
+                    <Link to="/profile" className="getStartedButton">Go to Profile</Link>
+                ) : (
+                    <Link to="/signup" className="getStartedButton">Get Started</Link>
+                )}
             </header>
             <section className="featureSection">
                 <div className="feature">

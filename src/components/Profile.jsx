@@ -22,9 +22,9 @@ const Profile = () => {
     const handleSignOut = async () => {
         try {
             await signOut(auth);
-            alert('User signed out successfully');
+            // alert('User signed out successfully');
         } catch (error) {
-            alert(error.message);
+            alert(`Error: ${error.message}`);
         }
     }
 
