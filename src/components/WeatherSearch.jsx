@@ -2,7 +2,12 @@ import { useState, useEffect } from 'react';
 import { getCoordsOfCity, getWeatherData } from '../services/WeatherService';
 import PropTypes from 'prop-types';
 
-const WeatherSearch = ({ destination, setWeather, startDate, endDate }) => {
+const WeatherSearch = ({
+    destination = '',
+    setWeather = () => {},
+    startDate = new Date().toISOString().split('T')[0],
+    endDate = new Date().toISOString().split('T')[0]
+}) => {
     const [weatherData, setWeatherData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -83,10 +88,10 @@ const WeatherSearch = ({ destination, setWeather, startDate, endDate }) => {
 };
 
 WeatherSearch.propTypes = {
-    destination: PropTypes.string.isRequired,
-    setWeather: PropTypes.func.isRequired,
-    startDate: PropTypes.string.isRequired,
-    endDate: PropTypes.string.isRequired
+    destination: PropTypes.string,
+    setWeather: PropTypes.func,
+    startDate: PropTypes.string,
+    endDate: PropTypes.string
 };
 
 export default WeatherSearch;

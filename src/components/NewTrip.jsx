@@ -1,41 +1,43 @@
 import { useState, useEffect } from 'react';
-// import axios from 'axios';
 import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import WeatherSearch from './WeatherSearch';
+import FlightSearch from './FlightSearch';
+import HotelSearch from './HotelSearch';
+import AttractionSearch from './AttractionSearch';
 
 const NewTrip = () => {
     const [userId, setUserId] = useState("klinoff");
     const [origin, setOrigin] = useState('');
     const [destination, setDestination] = useState('');
-    const [startDate, setStartDate] = useState('');
+    const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
     const [endDate, setEndDate] = useState('');
     const [step, setStep] = useState(1);
     const [weather, setWeather] = useState(null);
+    const [selectedOutboundFlight, setSelectedOutboundFlight] = useState(null);
+    const [selectedInboundFlight, setSelectedInboundFlight] = useState(null);
+    const [selectedHotel, setSelectedHotel] = useState(null);
+    const [selectedAttractions, setSelectedAttractions] = useState([]);
+    const navigate = useNavigate();
     let totalDays = 1;
-    // step 1: setting up the trip
-    // step 2: viewing weather for the trip
-    // step 3: searching for flights and selecting a flight
-    // step 4: searching for hotels and selecting a hotel
-    // step 5: searching for attractions and selecting attraction(s)
-    // step 6: viewing the trip itinerary
-    // step 7: saving the trip, along with the selected flight, hotel, and attraction(s) with up to 300 characters of notes
-    
+
     const getTodayDate = () => {
         const today = new Date();
         return today.toISOString().split('T')[0];
     }
 
     useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-        setUserId(user.uid);
-        } else {
-        setUserId(null);
-        }
-    });
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setUserId(user.uid);
+            } else {
+                setUserId(null);
+            }
+        });
 
-    return () => unsubscribe();
+        return () => unsubscribe();
     }, []);
 
     const checkFields = () => {
@@ -54,17 +56,70 @@ const NewTrip = () => {
             setDestination(document.getElementById('destination').value);
             setStartDate(document.getElementById('startDate').value);
             setEndDate(document.getElementById('endDate').value);
-            console.log('Origin:', origin);
-            console.log('Destination:', destination);
-            console.log('Start Date:', startDate);
-            console.log('End Date:', endDate);
             totalDays = Math.floor((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
-            console.log('Total Days:', totalDays);
             setStep(step + 1);
         }
     }
 
-    console.log('User ID:', userId);
+    const handleSelectOutboundFlight = (flight) => {
+        setSelectedOutboundFlight(flight);
+        setStep(step + 1);
+    }
+
+    const handleSelectInboundFlight = (flight) => {
+        setSelectedInboundFlight(flight);
+        setStep(step + 1);
+    }
+
+    const handleSelectHotel = (hotel) => {
+        setSelectedHotel(hotel);
+        setStep(step + 1);
+    }
+
+    const handleSelectAttraction = (attractions) => {
+        setSelectedAttractions(attractions);
+    }
+
+    const handleReset = () => {
+        setOrigin('');
+        setDestination('');
+        setStartDate(new Date().toISOString().split('T')[0]);
+        setEndDate('');
+        setSelectedOutboundFlight(null);
+        setSelectedInboundFlight(null);
+        setSelectedHotel(null);
+        setSelectedAttractions([]);
+        setStep(1);
+    }
+
+    const handleTripSave = async () => {
+        const tripDetails = {
+            user_id: userId,
+            trip_name: `${origin} to ${destination}`,
+            departure_city: origin,
+            arrival_city: destination,
+            departure_date: startDate,
+            return_date: endDate,
+            details: JSON.stringify({
+                outbound_flight: selectedOutboundFlight,
+                inbound_flight: selectedInboundFlight,
+                hotel: selectedHotel,
+                attractions: selectedAttractions
+            })
+        };
+
+        try {
+            const response = await axios.post('http://127.0.0.1:5001/api/trips', tripDetails);
+            if (response.status === 201) {
+                alert('Trip saved successfully!');
+                handleReset();
+                navigate('/user-trips');
+            }
+        } catch (error) {
+            alert(`Error saving trip: ${error.message}`);
+        }
+    }
+
     return (
         <div>
             {userId !== "klinoff" ? (
@@ -75,36 +130,36 @@ const NewTrip = () => {
                         <form>
                             <label htmlFor="Origin">Origin City:</label>
                             <input
-                            type="text"
-                            id="Origin"
-                            name="Origin"
-                            onChange={(e) => setOrigin(e.target.value)}
-                            required /><br/>
+                                type="text"
+                                id="Origin"
+                                name="Origin"
+                                onChange={(e) => setOrigin(e.target.value)}
+                                required /><br/>
                             <label htmlFor="destination">Destination City:</label>
                             <input
-                            type="text"
-                            id="destination"
-                            name="destination"
-                            onChange={(e) => setDestination(e.target.value)}
-                            required /><br/>
+                                type="text"
+                                id="destination"
+                                name="destination"
+                                onChange={(e) => setDestination(e.target.value)}
+                                required /><br/>
                             <label htmlFor="startDate">Start Date:</label>
                             <input
-                            type="date"
-                            id="startDate"
-                            name="startDate"
-                            min={getTodayDate()}
-                            value={startDate || getTodayDate()}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            required /><br/>
+                                type="date"
+                                id="startDate"
+                                name="startDate"
+                                min={getTodayDate()}
+                                value={startDate || getTodayDate()}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                required /><br/>
                             <label htmlFor="endDate">End Date:</label>
                             <input
-                            type="date"
-                            id="endDate"
-                            name="endDate"
-                            min={startDate || getTodayDate()}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            required /><br/>
-                            <button onClick={handleSubmit}>Step 1: Flights</button>
+                                type="date"
+                                id="endDate"
+                                name="endDate"
+                                min={startDate || getTodayDate()}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                required /><br/>
+                            <button onClick={handleSubmit}>Next</button>
                         </form>
                     ) : step === 2 ? (
                         <>
@@ -114,35 +169,49 @@ const NewTrip = () => {
                             <p>End Date: {endDate}</p>
                             <p>Total Days: {totalDays}</p>
                             <button onClick={() => setStep(step - 1)}>Back</button>
-                            <button onClick={() => setStep(step + 1)}>Step 2: Hotels</button>
+                            {/* <button onClick={() => setStep(step + 1)}>Step 3: Outbound Flight</button> */}
                         </>
                     ) : step === 3 ? (
                         <>
-                            <p>Flights</p>
+                            <FlightSearch departureDate={startDate} departureCity={origin} arrivalCity={destination} onSelectFlight={handleSelectOutboundFlight} isOutbound={true} />
                             <button onClick={() => setStep(step - 1)}>Back</button>
-                            <button onClick={() => setStep(step + 1)}>Step 3: Attractions</button>
                         </>
                     ) : step === 4 ? (
                         <>
-                            <p>Hotels</p>
+                            <FlightSearch departureDate={endDate} departureCity={destination} arrivalCity={origin} onSelectFlight={handleSelectInboundFlight} isOutbound={false} />
                             <button onClick={() => setStep(step - 1)}>Back</button>
-                            <button onClick={() => setStep(step + 1)}>Step 4: Itinerary</button>
+                            <button onClick={() => setStep(step + 1)}>Step 5: Hotels</button>
                         </>
                     ) : step === 5 ? (
                         <>
-                            <p>Attractions</p>
+                            <HotelSearch arrivalCity={destination} onSelectHotel={handleSelectHotel} />
                             <button onClick={() => setStep(step - 1)}>Back</button>
-                            <button onClick={() => setStep(step + 1)}>Step 5: Save</button>
+                            <button onClick={() => setStep(step + 1)}>Step 6: Attractions</button>
                         </>
                     ) : step === 6 ? (
                         <>
-                            <p>Itinerary</p>
+                            <AttractionSearch arrivalCity={destination} onSelectAttraction={handleSelectAttraction} />
                             <button onClick={() => setStep(step - 1)}>Back</button>
-                            <button onClick={() => setStep(step + 1)}>Step 6: Overview</button>
+                            <button onClick={() => setStep(step + 1)}>Step 7: Overview</button>
                         </>
                     ) : step === 7 ? (
                         <>
-                            <p>Save</p>
+                            <h2>Trip Overview</h2>
+                            <p><strong>Origin:</strong> {origin}</p>
+                            <p><strong>Destination:</strong> {destination}</p>
+                            <p><strong>Start Date:</strong> {startDate}</p>
+                            <p><strong>End Date:</strong> {endDate}</p>
+                            <p><strong>Outbound Flight:</strong> {selectedOutboundFlight ? `${selectedOutboundFlight.legs[0].segments[0].flightNumber} - ${selectedOutboundFlight.legs[0].carriers.marketing[0].name} - ${selectedOutboundFlight.price.formatted}` : 'None selected'}</p>
+                            <p><strong>Inbound Flight:</strong> {selectedInboundFlight ? `${selectedInboundFlight.legs[0].segments[0].flightNumber} - ${selectedInboundFlight.legs[0].carriers.marketing[0].name} - ${selectedInboundFlight.price.formatted}` : 'None selected'}</p>
+                            <p><strong>Hotel:</strong> {selectedHotel ? selectedHotel.name : 'None selected'}</p>
+                            <p><strong>Attractions:</strong></p>
+                            <ul>
+                                {selectedAttractions.map((attraction, index) => (
+                                    <li key={index}>{attraction.properties.name_international?.en || attraction.properties.name}</li>
+                                ))}
+                            </ul>
+                            <button onClick={handleReset}>Reset</button>
+                            <button onClick={handleTripSave}>Save</button>
                             <button onClick={() => setStep(step - 1)}>Back</button>
                         </>
                     ) : (
@@ -155,6 +224,5 @@ const NewTrip = () => {
         </div>
     );
 };
-
 
 export default NewTrip;

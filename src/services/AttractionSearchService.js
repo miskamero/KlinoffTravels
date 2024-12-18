@@ -9,7 +9,7 @@ export const getCoordsOfCity = async (city) => {
     return response.data;
 };
 
-export const getAttractions = async (city, amountOfPlaces = 5, area = 4000) => {
+export const getAttractions = async (city, amountOfPlaces = 7, area = 4000) => {
     try {
         const coords = await getCoordsOfCity(city);
         const { latitude, longitude } = coords;

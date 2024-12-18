@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "klinoff": "concurrently -n \"airports,cityAPI,TripsDB,Vite\" -c \"red,green,blue,cyan\" \"cd backend/airportDB && python airports.py\" \"cd backend/cityAPI && python converterAPI.py\" \"cd backend/tripsDB && python userTripsDB.py\" \"npm run dev\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -15,6 +16,7 @@
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.10",
     "axios": "^1.7.9",
+    "concurrently": "^9.1.0",
     "express": "^4.21.2",
     "firebase": "^11.0.2",
     "http-proxy-middleware": "^3.0.3",

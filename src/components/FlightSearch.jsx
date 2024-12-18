@@ -1,74 +1,50 @@
 import { useState, useEffect } from 'react';
 import { searchFlights } from '../services/FlightSearchService';
+import PropTypes from 'prop-types';
 import '../styles/FlightSearch.scss';
 
-const FlightSearch = () => {
+const FlightSearch = ({
+    departureDate = new Date().toISOString().split('T')[0],
+    departureCity = '',
+    arrivalCity = '',
+    onSelectFlight,
+    isOutbound = true
+}) => {
     const [flights, setFlights] = useState([]);
     const [advancedFlights, setAdvancedFlights] = useState([]);
     const [error, setError] = useState('');
-    const [departureDate, setDepartureDate] = useState('');
-    const [departureCity, setDepartureCity] = useState('');
-    const [arrivalCity, setArrivalCity] = useState('');
 
     useEffect(() => {
-        console.log('Advanced Flights:', advancedFlights);
-    }, [advancedFlights]);
+        const fetchFlights = async () => {
+            setError('');
+            setFlights([]);
+            setAdvancedFlights([]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        setFlights([]);
-        setAdvancedFlights([]);
-
-        try {
-            const { airlabs, skyscanner } = await searchFlights(departureCity, arrivalCity, departureDate);
-            setFlights(airlabs);
-            if (skyscanner) {
-                setAdvancedFlights(skyscanner);
+            try {
+                const { airlabs, skyscanner } = await searchFlights(departureCity, arrivalCity, departureDate);
+                const currentTime = new Date();
+                const filteredAirlabs = airlabs.filter(flight => new Date(flight.dep_time) > currentTime);
+                setFlights(filteredAirlabs);
+                if (skyscanner && new Date(departureDate) > currentTime) {
+                    const filteredSkyscanner = skyscanner.itineraries.buckets.map(bucket => ({
+                        ...bucket,
+                        items: bucket.items.filter(item => new Date(item.legs[0].departure) > currentTime)
+                    }));
+                    setAdvancedFlights({ ...skyscanner, itineraries: { ...skyscanner.itineraries, buckets: filteredSkyscanner } });
+                }
+            } catch (err) {
+                setError(err.message);
             }
-        } catch (err) {
-            setError(err.message);
+        };
+
+        if (departureCity && arrivalCity && departureDate) {
+            fetchFlights();
         }
-    };
+    }, [departureCity, arrivalCity, departureDate]);
 
     return (
         <div id="flightSearchContainer">
-            <h2>Flight Search</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>
-                        Departure Date:
-                        <input
-                            type="date"
-                            value={departureDate}
-                            onChange={(e) => setDepartureDate(e.target.value)}
-                        />
-                    </label>
-                </div>
-                <div className="form-group">
-                    <label>
-                        Departure City:
-                        <input
-                            type="text"
-                            value={departureCity}
-                            onChange={(e) => setDepartureCity(e.target.value)}
-                            required
-                        />
-                    </label>
-                </div>
-                <div className="form-group">
-                    <label>
-                        Arrival City:
-                        <input
-                            type="text"
-                            value={arrivalCity}
-                            onChange={(e) => setArrivalCity(e.target.value)}
-                            required
-                        />
-                    </label>
-                </div>
-                <button type="submit">Search</button>
-            </form>
+            <h2>{isOutbound ? 'Outbound Flight Search' : 'Inbound Flight Search'}</h2>
             {error && <p className="error">{error}</p>}
             <div className="results">
                 {advancedFlights && advancedFlights.itineraries && advancedFlights.itineraries.buckets && advancedFlights.itineraries.buckets.length > 0 ? (
@@ -81,6 +57,7 @@ const FlightSearch = () => {
                                     <p><strong>Departure:</strong> {item.legs[0].origin.displayCode} at {item.legs[0].departure}</p>
                                     <p><strong>Arrival:</strong> {item.legs[0].destination.displayCode} at {item.legs[0].arrival}</p>
                                     <p><strong>Duration:</strong> {item.legs[0].durationInMinutes} minutes</p>
+                                    <button onClick={() => onSelectFlight(item)}>Select Flight</button>
                                 </li>
                             ))
                         )}
@@ -97,16 +74,25 @@ const FlightSearch = () => {
                                     <p><strong>Status:</strong> {flight.status}</p>
                                     <p><strong>Duration:</strong> {flight.duration} minutes</p>
                                     {flight.delayed && <p><strong>Delayed:</strong> {flight.delayed} minutes</p>}
+                                    <button onClick={() => onSelectFlight(flight)}>Select Flight</button>
                                 </li>
                             ))}
                         </ul>
                     ) : (
-                        <p>No flights found</p>
+                        <p>Loading...</p>
                     )
                 )}
             </div>
         </div>
     );
+};
+
+FlightSearch.propTypes = {
+    departureDate: PropTypes.string,
+    departureCity: PropTypes.string,
+    arrivalCity: PropTypes.string,
+    onSelectFlight: PropTypes.func.isRequired,
+    isOutbound: PropTypes.bool
 };
 
 export default FlightSearch;
