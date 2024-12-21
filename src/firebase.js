@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCGP29cq54YHrsOaDkQyOBo9PR1vA-TTkA",
+    apiKey: "AIzaSyCGP29cq54YHrsOaDkQyOBo9PR1vA-TTkA", // revoked, use your own
     authDomain: "klinofftravels.firebaseapp.com",
     projectId: "klinofftravels",
     storageBucket: "klinofftravels.firebasestorage.app",

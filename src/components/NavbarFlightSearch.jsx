@@ -4,7 +4,7 @@ import { searchFlights, fetchIATA } from '../services/FlightSearchService';
 import PropTypes from 'prop-types';
 import '../styles/NavbarFlightSearch.scss';
 
-const PEXELS_API_KEY = 'ILqm2Q5HOcAUgoFxX4hiIJ0aNHTdwUgDVyg6hqjvs7YpfDIMVZXOUW87';
+const PEXELS_API_KEY = 'ILqm2Q5HOcAUgoFxX4hiIJ0aNHTdwUgDVyg6hqjvs7YpfDIMVZXOUW87'; // revoked, use your own
 
 const NavbarFlightSearch = () => {
     const location = useLocation();

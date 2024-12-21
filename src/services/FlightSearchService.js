@@ -1,12 +1,12 @@
 import axios from 'axios';
 
 const flightAPIUrl = "http://127.0.0.1:5000/api/";
-const airlabsApiKey = '8bd89b9c-ab4c-4447-b39c-a8910eb4bc1c';
+const airlabsApiKey = '8bd89b9c-ab4c-4447-b39c-a8910eb4bc1c'; // revoked, use your own
 const skyscannerApiConfig = {
     method: 'get',
     url: 'https://Skyscanner.proxy-production.allthingsdev.co/search?adults=1',
     headers: { 
-        'x-apihub-key': 'B2WyWLbT1J0rznbUYPmaB01waqAA70iydq29KCIGVoxDjvuWuA', 
+        'x-apihub-key': 'B2WyWLbT1J0rznbUYPmaB01waqAA70iydq29KCIGVoxDjvuWuA', // revoked, use your own
         'x-apihub-host': 'Skyscanner.allthingsdev.co', 
         'x-apihub-endpoint': '1bffa651-8d6b-449d-a181-0d9f8e17b0ac'
     }

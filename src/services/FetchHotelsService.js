@@ -4,7 +4,7 @@ const tripadvisorApiConfig = {
     method: 'GET',
     url: 'https://tripadvisor-scraper.p.rapidapi.com/hotels/list',
     headers: {
-        'x-rapidapi-key': 'f236296ef0msh656e9a274a63e9ep12c7cfjsn42a2f740ad7a',
+        'x-rapidapi-key': 'f236296ef0msh656e9a274a63e9ep12c7cfjsn42a2f740ad7a', // revoked, use your own
         'x-rapidapi-host': 'tripadvisor-scraper.p.rapidapi.com'
     }
 };

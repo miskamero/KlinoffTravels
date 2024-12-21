@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const cityAPIUrl = "http://127.0.0.1:5002/api/";
-const geoapifyAPIKey = "34464d8b6f4f477b9ed82fc65381c263";
+const geoapifyAPIKey = "34464d8b6f4f477b9ed82fc65381c263"; // revoked, use your own 
 const geoapifyBaseUrl = "https://api.geoapify.com/v2/places";
 
 export const getCoordsOfCity = async (city) => {
